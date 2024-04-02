@@ -117,37 +117,52 @@ class HomeScreen extends GetView<HomeController> {
   }
 
   _expensesList() {
-    return Obx(
-      () => (controller.expensesList.isNotEmpty)
-          ? ListView.builder(
-              primary: false,
-              itemCount: controller.expensesList.length,
-              reverse: true,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return _expenseDetails(
-                    title: controller.expensesList[index].title,
-                    amount: controller.expensesList[index].amount.toStringAsFixed(0),
-                    category: controller.expensesList[index].category);
-              },
-            )
-          : SizedBox(
-              height: Get.height * 0.5,
-              child: Center(
-                child: Text(
-                  "No Expenses Found",
-                  style: TextStyle(fontSize: Get.height * 0.02),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Overall Expenses -",
+          style: TextStyle(
+            fontSize: Get.height * 0.03,
+          ),
+        ).paddingOnly(
+          left: Get.height * 0.02,
+        ),
+        Obx(
+          () => (controller.expensesList.isNotEmpty)
+              ? ListView.builder(
+                  primary: false,
+                  itemCount: controller.expensesList.length,
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return _expenseDetails(
+                      title: controller.expensesList[index].title,
+                      amount: controller.expensesList[index].amount.toStringAsFixed(0),
+                      category: controller.expensesList[index].category,
+                    );
+                  },
+                )
+              : SizedBox(
+                  height: Get.height * 0.5,
+                  child: Center(
+                    child: Text(
+                      "No Expenses Found",
+                      style: TextStyle(fontSize: Get.height * 0.02),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+        ),
+      ],
     );
   }
 
   _expenseDetails({title, amount, category}) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.lightGreen.shade100,
         borderRadius: BorderRadius.circular(
-          Get.width * 0.05,
+          Get.width * 0.03,
         ),
       ),
       child: Column(
