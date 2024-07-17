@@ -11,8 +11,8 @@ class SplashController extends GetxController {
   }
 
   navigateToNextScreen() {
-    Timer(Duration(seconds: 3), () {
-      Get.offAllNamed(AppRoutes.home);
+    Timer(Duration(seconds: 1), () {
+      Get.offAllNamed(AppRoutes.login);
     });
   }
 }

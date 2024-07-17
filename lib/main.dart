@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'constants/functions/api_manager.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+ApiManager apiManager = ApiManager();
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,6 +20,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -26,6 +33,9 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         builder: (context, child) => GetMaterialApp(
           theme: ThemeData(
+            textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
+              bodyMedium: GoogleFonts.oswald(textStyle: textTheme.bodyMedium),
+            ),
             // colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           ),
           initialRoute: AppPages.INITIAL,
