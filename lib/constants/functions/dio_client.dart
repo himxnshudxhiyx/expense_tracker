@@ -48,10 +48,10 @@ class DioClient {
     // );
   }
 
+
   Future<Map<String, dynamic>> get(String url, {Map<String, dynamic>? params, bool? auth}) async {
     try {
       var options = Options();
-
       if (auth == true) {
         var authToken = await UserPreferences().getAuthToken() ?? '';
         options = Options(
@@ -60,20 +60,33 @@ class DioClient {
           },
         );
       }
-      var response = await _dio.get(url, queryParameters: params, options: options,);
+      var response = await _dio.get(url, queryParameters: params, options: options);
       return response.data;
     } catch (e) {
-      print('Error occurred in GET request: $e');
+      if (e is DioError && e.response != null) {
+        throw e.response!.data; // Throw the error response data
+      }
       throw Exception('Failed to load data');
     }
   }
 
-  Future<Map<String, dynamic>> post(String url, {dynamic data}) async {
+  Future<Map<String, dynamic>> post(String url, {dynamic data, bool? auth}) async {
     try {
-      Response response = await _dio.post(url, data: data);
+      var options = Options();
+      if (auth == true) {
+        var authToken = await UserPreferences().getAuthToken() ?? '';
+        options = Options(
+          headers: {
+            'Authorization': authToken,
+          },
+        );
+      }
+      Response response = await _dio.post(url, data: data, options: options);
       return response.data;
     } catch (e) {
-      print('Error occurred in POST request: $e');
+      if (e is DioError && e.response != null) {
+        throw e.response!.data; // Throw the error response data
+      }
       throw Exception('Failed to load data');
     }
   }

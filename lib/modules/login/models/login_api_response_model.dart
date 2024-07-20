@@ -11,19 +11,27 @@ String loginApiResponseModelToJson(LoginApiResponseModel data) => json.encode(da
 class LoginApiResponseModel {
   String? authToken;
   UserDetails? user;
+  String? message;
+  int? statusCode;
 
   LoginApiResponseModel({
     this.authToken,
     this.user,
+    this.message,
+    this.statusCode,
   });
 
   factory LoginApiResponseModel.fromJson(Map<String, dynamic> json) => LoginApiResponseModel(
     authToken: json["authToken"],
+    message: json["message"],
+    statusCode: json["status"],
     user: json["user"] == null ? null : UserDetails.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
     "authToken": authToken,
+    "message": message,
+    "status": statusCode,
     "user": user?.toJson(),
   };
 }
@@ -33,7 +41,7 @@ class UserDetails {
   String? username;
   String? firstName;
   String? lastName;
-  int? phoneNumber;
+  String? phoneNumber;
   bool? verified;
 
   UserDetails({

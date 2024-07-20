@@ -1,9 +1,4 @@
-import 'dart:convert';
-
-
-
-import 'dio_client.dart'; // Import DioClient class
-import 'package:dio/dio.dart';
+import 'dio_client.dart';
 
 class ApiManager {
   final DioClient _dioClient = DioClient(); // Instance of DioClient
@@ -15,21 +10,22 @@ class ApiManager {
       var response = await _dioClient.get("${baseUrl}$url", params: params, auth: auth);
       return response;
     } catch (e) {
-      print('Error occurred in GET request: $e');
+      if (e is Map<String, dynamic>) {
+        return e; // Return the error response data
+      }
       throw Exception('Failed to load data');
     }
   }
 
-  Future<Map<String, dynamic>> post(String url, {dynamic body}) async {
+  Future<Map<String, dynamic>> post(String url, {dynamic body, bool? auth}) async {
     try {
-      var response = await _dioClient.post("${baseUrl}$url", data: body);
+      var response = await _dioClient.post("${baseUrl}$url", data: body, auth: auth);
       return response;
-    } catch (e, stack) {
-      print('Error occurred in POST request: $e');
-      print('Stack occurred in POST request: $stack');
+    } catch (e) {
+      if (e is Map<String, dynamic>) {
+        return e; // Return the error response data
+      }
       throw Exception('Failed to load data');
     }
   }
-
-// Add more methods as needed for other HTTP methods (PUT, DELETE, etc.)
 }

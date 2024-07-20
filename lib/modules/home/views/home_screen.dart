@@ -11,6 +11,18 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            GestureDetector(
+              onTap: (){
+                controller.hitLogoutApi();
+              },
+              child: Icon(
+                Icons.logout_rounded,
+              ),
+            ).paddingOnly(right: 10),
+          ],
+        ),
         body: _bodyWidget(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
@@ -88,7 +100,9 @@ class HomeScreen extends GetView<HomeController> {
               horizontal: Get.height * 0.05,
             ),
             Obx(
-              () => (controller.expensesList.isNotEmpty == true) ? _expensesChart() : Container(),
+              () => (controller.expensesList.isNotEmpty == true)
+                  ? _expensesChart()
+                  : Container(),
             ),
             _expensesList(),
           ],
@@ -107,9 +121,11 @@ class HomeScreen extends GetView<HomeController> {
             dataSource: dataMap.entries.toList(),
             xValueMapper: (entry, _) => entry.key,
             yValueMapper: (entry, _) => entry.value,
-            dataLabelMapper: (entry, _) => '${entry.key}: ${entry.value.toStringAsFixed(0)} ₹',
+            dataLabelMapper: (entry, _) =>
+                '${entry.key}: ${entry.value.toStringAsFixed(0)} ₹',
             // Display category name and total expense
-            dataLabelSettings: const DataLabelSettings(isVisible: true), // Show data labels
+            dataLabelSettings:
+                const DataLabelSettings(isVisible: true), // Show data labels
           ),
         ],
       ),
@@ -138,7 +154,8 @@ class HomeScreen extends GetView<HomeController> {
                   itemBuilder: (context, index) {
                     return _expenseDetails(
                       title: controller.expensesList[index].title,
-                      amount: controller.expensesList[index].amount.toStringAsFixed(0),
+                      amount: controller.expensesList[index].amount
+                          .toStringAsFixed(0),
                       category: controller.expensesList[index].category,
                     );
                   },
