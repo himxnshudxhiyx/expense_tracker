@@ -9,6 +9,8 @@ import 'package:expense_tracker/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../modules/login/bindings/login_bindings.dart';
+import '../modules/signUp/bindings/signUp_bindings.dart';
+import '../modules/signUp/views/signUp_screen.dart';
 
 class AppPages {
   static const INITIAL = AppRoutes.splash;
@@ -28,6 +30,11 @@ class AppPages {
       name: AppRoutes.login,
       page: () => LoginScreen(),
       binding: LoginBindings(),
+    ),
+    GetPage(
+      name: AppRoutes.signUp,
+      page: () => SignUpScreen(),
+      binding: SignUpBindings(),
     ),
     GetPage(
       name: AppRoutes.addExpense,

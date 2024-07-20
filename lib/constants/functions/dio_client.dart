@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:expense_tracker/constants/functions/preference_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_pretty_dio_logger/flutter_pretty_dio_logger.dart';
 
@@ -16,12 +17,12 @@ class DioClient {
         PrettyDioLogger(
           requestHeader: true,
           queryParameters: true,
-          requestBody: true,
-          responseHeader: true,
+          // requestBody: true,
+          // responseHeader: true,
           responseBody: true,
           error: true,
           showProcessingTime: true,
-          showCUrl: true,
+          // showCUrl: false,
           canShowLog: kDebugMode,
         ),);
     // _dio.interceptors.add(
@@ -47,9 +48,19 @@ class DioClient {
     // );
   }
 
-  Future<Map<String, dynamic>> get(String url, {Map<String, dynamic>? params}) async {
+  Future<Map<String, dynamic>> get(String url, {Map<String, dynamic>? params, bool? auth}) async {
     try {
-      var response = await _dio.get(url, queryParameters: params);
+      var options = Options();
+
+      if (auth == true) {
+        var authToken = await UserPreferences().getAuthToken() ?? '';
+        options = Options(
+          headers: {
+            'Authorization': authToken,
+          },
+        );
+      }
+      var response = await _dio.get(url, queryParameters: params, options: options,);
       return response.data;
     } catch (e) {
       print('Error occurred in GET request: $e');

@@ -7,10 +7,10 @@ import '../../../Widgets/text_field.dart';
 import '../../../constants/app_strings.dart';
 import '../../../constants/elevated_button_widget.dart';
 import '../../../constants/functions/validation_functions.dart';
-import '../controllers/login_controller.dart';
+import '../controllers/signUp_controller.dart';
 
-class LoginScreen extends GetView<LoginController> {
-  LoginScreen({super.key});
+class SignUpScreen extends GetView<SignUpController> {
+  SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +22,6 @@ class LoginScreen extends GetView<LoginController> {
     );
   }
 
-  // _bodyWidget() => SingleChildScrollView(
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           TextView(text: "Login to continue", fontSize: 26,),
-  //         ],
-  //       ).paddingAll(
-  //         Get.height * 0.01,
-  //       ),
-  //     );
   _bodyWidget() => Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -104,13 +94,13 @@ class LoginScreen extends GetView<LoginController> {
                         ),
                         SizedBox(height: 20),
                         ElevatedButtonWidget(
-                          text: 'Login',
+                          text: 'Sign Up',
                           textColor: Colors.white,
                           onPressed: () {
                             FocusScope.of(Get.context!).unfocus();
                             if (controller.loginFormKey.currentState!
                                 .validate()) {
-                              controller.callLoginApi();
+                              controller.callSignUpApi();
                             }
                           },
                         ),

@@ -8,7 +8,7 @@ import 'package:expense_tracker/routes/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
+class SignUpController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -17,7 +17,7 @@ class LoginController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   LoginApiResponseModel loginApiResponseModel = LoginApiResponseModel();
 
-  callLoginApi() async {
+  callSignUpApi() async {
     try {
       var request = {
         'username': emailController.text.toString(),

@@ -10,9 +10,9 @@ class ApiManager {
 
   String baseUrl = "https://notes-node-rho.vercel.app/api/";
 
-  Future<Map<String, dynamic>>  get(String url, {Map<String, dynamic>? params}) async {
+  Future<Map<String, dynamic>> get(String url, {Map<String, dynamic>? params, bool? auth}) async {
     try {
-      var response = await _dioClient.get("${baseUrl}$url", params: params);
+      var response = await _dioClient.get("${baseUrl}$url", params: params, auth: auth);
       return response;
     } catch (e) {
       print('Error occurred in GET request: $e');

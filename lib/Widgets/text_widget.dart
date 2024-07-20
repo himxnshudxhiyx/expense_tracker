@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextView extends StatelessWidget {
   final String text;
@@ -25,7 +26,13 @@ class TextView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: style ?? TextStyle(fontSize: fontSize?.sp ?? 16.sp, color: fontColor ?? Colors.black),
+      style: style ??
+          TextStyle(
+            fontSize: fontSize?.sp ?? 16.sp,
+            color: fontColor ?? Colors.black,
+            fontFamily: GoogleFonts.poppins()
+                .fontFamily,
+          ),
       textAlign: textAlign,
       overflow: overflow,
       maxLines: maxLines,

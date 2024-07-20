@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final String labelText;
   final TextEditingController controller;
   final bool obscureText;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
-  final Widget? suffixIcon; // New property for suffix icon
-  final Widget? prefixIcon; // New property for prefix icon
+  final Widget? suffixWidget;
+  final Widget? prefixIcon;
+  final String? Function(String?)? validator;
 
   const AppTextField({
     Key? key,
@@ -17,23 +19,57 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType,
     this.inputFormatters,
-    this.suffixIcon, // Initialize suffix icon property
-    this.prefixIcon, // Initialize prefix icon property
+    this.suffixWidget,
+    this.prefixIcon,
+    this.validator,
   }) : super(key: key);
+
+  @override
+  _AppTextFieldState createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_validate);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_validate);
+    super.dispose();
+  }
+
+  void _validate() {
+    final error = widget.validator?.call(widget.controller.text);
+    if (error != _errorText) {
+      setState(() {
+        _errorText = error;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
       decoration: InputDecoration(
-        labelText: labelText,
+        labelText: widget.labelText,
         border: OutlineInputBorder(),
-        suffixIcon: suffixIcon, // Assign suffix icon property
-        prefixIcon: prefixIcon,
+        suffixIcon: widget.suffixWidget,
+        prefixIcon: widget.prefixIcon,
+        errorText: _errorText, // Display the error text
       ),
+      onChanged: (value) {
+        _validate();
+      },
     );
   }
 }

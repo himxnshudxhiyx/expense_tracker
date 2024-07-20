@@ -21,6 +21,7 @@ dependencies:
   google_fonts: ^6.2.1
   dio: ^5.5.0+1
   flutter_pretty_dio_logger: ^3.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
