@@ -8,6 +8,7 @@ class TextView extends StatelessWidget {
   final double? fontSize;
   final Color? fontColor;
   final TextAlign? textAlign;
+  final FontWeight? fontWeight;
   final TextOverflow? overflow;
   final int? maxLines;
 
@@ -18,6 +19,7 @@ class TextView extends StatelessWidget {
     this.fontSize,
     this.fontColor,
     this.textAlign,
+    this.fontWeight,
     this.overflow,
     this.maxLines,
   }) : super(key: key);
@@ -32,6 +34,7 @@ class TextView extends StatelessWidget {
             color: fontColor ?? Colors.black,
             fontFamily: GoogleFonts.poppins()
                 .fontFamily,
+            fontWeight: fontWeight ?? FontWeight.w500
           ),
       textAlign: textAlign,
       overflow: overflow,

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../Widgets/text_field.dart';
 import '../../../constants/app_strings.dart';
-import '../../../constants/elevated_button_widget.dart';
+import '../../../Widgets/elevated_button_widget.dart';
 import '../../../constants/functions/validation_functions.dart';
 import '../controllers/signUp_controller.dart';
 

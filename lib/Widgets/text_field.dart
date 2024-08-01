@@ -10,6 +10,7 @@ class AppTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final Widget? suffixWidget;
   final Widget? prefixIcon;
+  final int? maxLines;
   final String? Function(String?)? validator;
 
   const AppTextField({
@@ -20,6 +21,7 @@ class AppTextField extends StatefulWidget {
     this.keyboardType,
     this.inputFormatters,
     this.suffixWidget,
+    this.maxLines,
     this.prefixIcon,
     this.validator,
   }) : super(key: key);
@@ -56,6 +58,7 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      maxLines: widget.maxLines ?? 1,
       obscureText: widget.obscureText,
       validator: widget.validator,
       keyboardType: widget.keyboardType,

@@ -8,10 +8,8 @@ import 'package:expense_tracker/modules/login/models/login_api_response_model.da
 import 'package:expense_tracker/routes/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:loggerx/loggerx.dart';
 
 import '../../../constants/functions/toast_message.dart';
-import '../../../constants/models.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();

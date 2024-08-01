@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:expense_tracker/constants/functions/preference_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_pretty_dio_logger/flutter_pretty_dio_logger.dart';
+import 'dart:developer';
 
 class DioClient {
   late Dio _dio;
@@ -13,39 +14,40 @@ class DioClient {
 
   void _setupInterceptors() {
     // Add interceptors for error handling, logging, etc.
-    _dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          queryParameters: true,
-          // requestBody: true,
-          // responseHeader: true,
-          responseBody: true,
-          error: true,
-          showProcessingTime: true,
-          // showCUrl: false,
-          canShowLog: kDebugMode,
-        ),);
     // _dio.interceptors.add(
-    //   InterceptorsWrapper(
-    //     onError: (error, handler) {
-    //       // Customize error handling here
-    //       print('Dio Error: ${error.message}');
-    //       // You can throw a custom exception or handle errors as needed
-    //       return handler.next(error);
-    //     },
-    //     onRequest: (options, handler) {
-    //       // Optional: Log request details, headers, etc.
-    //       print('--> Method: ${options.method} URL: ${options.path}');
-    //       print('--> Request ${options.data}');
-    //       return handler.next(options);
-    //     },
-    //     onResponse: (response, handler) {
-    //       // Optional: Log response details, status code, etc.
-    //       print('<-- Status Code: ${response.statusCode}');
-    //       return handler.next(response);
-    //     },
-    //   ),
-    // );
+    //     PrettyDioLogger(
+    //       // requestHeader: true,
+    //       // queryParameters: true,
+    //       // requestBody: true,
+    //       // responseHeader: true,
+    //       responseBody: true,
+    //       error: true,
+    //       showProcessingTime: true,
+    //       // showCUrl: false,
+    //       canShowLog: kDebugMode,
+    //     ),);
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (error, handler) {
+          // Customize error handling here
+          log('Dio Error: ${error.message}');
+          // You can throw a custom exception or handle errors as needed
+          return handler.next(error);
+        },
+        onRequest: (options, handler) {
+          // Optional: Log request details, headers, etc.
+          log('--> Method: ${options.method} | URL: ${options.path}');
+          log('--> Request ${options.data}');
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          // Optional: Log response details, status code, etc.
+          log('<-- Status Code: ${response.statusCode}');
+          log('<-- Response: ${response.data}');
+          return handler.next(response);
+        },
+      ),
+    );
   }
 
 

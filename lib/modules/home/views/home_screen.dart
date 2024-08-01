@@ -1,8 +1,12 @@
+import 'package:expense_tracker/Widgets/elevated_button_widget.dart';
 import 'package:expense_tracker/modules/home/controllers/home_controller.dart';
 import 'package:expense_tracker/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../addNote/views/add_note_view.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
@@ -12,9 +16,27 @@ class HomeScreen extends GetView<HomeController> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${controller.getGreeting()},",
+                style: TextStyle(fontSize: Get.height * 0.03),
+              ),
+              Obx(
+                () => GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    "${controller.userDetails.value.firstName ?? ""} ${controller.userDetails.value.lastName ?? ""}",
+                    style: TextStyle(fontSize: Get.height * 0.025),
+                  ),
+                ),
+              ),
+            ],
+          ),
           actions: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 controller.hitLogoutApi();
               },
               child: Icon(
@@ -42,72 +64,74 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  _bodyWidget() => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${controller.getGreeting()},",
-              style: TextStyle(fontSize: Get.height * 0.04),
-            ).paddingOnly(
-              bottom: Get.height * 0.04,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(
+  _bodyWidget() => RefreshIndicator(
+        displacement: 50,
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        onRefresh: () {
+          return controller.getSavedData();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _addNotesAndExpenses(),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(
+                    Get.width * 0.05,
+                  ),
+                ),
+                padding: EdgeInsets.all(
                   Get.width * 0.05,
                 ),
-              ),
-              padding: EdgeInsets.all(
-                Get.width * 0.05,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Total Expenses",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: Get.width * 0.06,
-                          color: Colors.grey,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total Expenses",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: Get.width * 0.06,
+                            color: Colors.grey,
+                          ),
+                        ).paddingAll(
+                          Get.width * 0.03,
                         ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: Get.width * 0.05,
+                          color: Colors.grey,
+                        )
+                      ],
+                    ),
+                    Obx(
+                      () => Text(
+                        "₹ ${controller.totalExpenses}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: Get.width * 0.06),
                       ).paddingAll(
                         Get.width * 0.03,
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: Get.width * 0.05,
-                        color: Colors.grey,
-                      )
-                    ],
-                  ),
-                  Obx(
-                    () => Text(
-                      "₹ ${controller.totalExpenses}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: Get.width * 0.06),
-                    ).paddingAll(
-                      Get.width * 0.03,
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ).paddingSymmetric(
+                horizontal: Get.height * 0.05,
               ),
-            ).paddingSymmetric(
-              horizontal: Get.height * 0.05,
-            ),
-            Obx(
-              () => (controller.expensesList.isNotEmpty == true)
-                  ? _expensesChart()
-                  : Container(),
-            ),
-            _expensesList(),
-          ],
-        ).paddingAll(
-          Get.height * 0.01,
+              Obx(
+                () => (controller.expensesList.isNotEmpty == true)
+                    ? _expensesChart()
+                    : Container(),
+              ),
+              _expensesList(),
+            ],
+          ).paddingAll(
+            Get.height * 0.01,
+          ),
         ),
       );
 
@@ -130,6 +154,18 @@ class HomeScreen extends GetView<HomeController> {
         ],
       ),
     );
+  }
+
+  _addNotesAndExpenses() {
+    return ElevatedButtonWidget(
+        text: "Add Notes",
+        onPressed: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: Get.context!,
+            builder: (context) => AddNewNote(),
+          );
+        }).paddingOnly(bottom: 20.sp);
   }
 
   _expensesList() {

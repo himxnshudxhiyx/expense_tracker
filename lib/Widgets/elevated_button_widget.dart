@@ -1,6 +1,5 @@
 import 'package:expense_tracker/Widgets/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ElevatedButtonWidget extends StatelessWidget {
   final String text;
