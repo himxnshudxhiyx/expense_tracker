@@ -25,7 +25,7 @@ class ApiManager {
       if (e is Map<String, dynamic>) {
         return e; // Return the error response data
       }
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load data$e');
     }
   }
 }

@@ -13,7 +13,6 @@ void main() {
 
 ApiManager apiManager = ApiManager();
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -33,16 +32,15 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         builder: (context, child) => GetMaterialApp(
           theme: ThemeData(
-            textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
-              bodyMedium: GoogleFonts.oswald(textStyle: textTheme.bodyMedium),
-            ),
-            // colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: AppBarTheme(color: Colors.deepPurple),
+            textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(),
           ),
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
           enableLog: true,
           debugShowCheckedModeBanner: false,
-          builder: EasyLoading.init(),
+          // builder: EasyLoading.init(),
         ),
       ),
     );

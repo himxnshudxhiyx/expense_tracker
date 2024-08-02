@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:expense_tracker/constants/models.dart';
 import 'package:expense_tracker/modules/add_expenses/controllers/add_expense_controller.dart';
+import 'package:expense_tracker/modules/home/model/notes_list_response_model.dart';
 import 'package:expense_tracker/modules/login/models/login_api_response_model.dart';
 import 'package:get/get.dart';
 
@@ -17,17 +18,23 @@ class HomeController extends GetxController {
 
   RxList<Expense> expensesList = <Expense>[].obs;
 
-  void onInit(){
+  void onInit() {
     getSavedData();
     getNotesListApiCall();
     super.onInit();
+  }
+
+  onRefresh() {
+    getSavedData();
+    getNotesListApiCall();
   }
 
   Map<String, double> getExpenseByCategory() {
     Map<String, double> categoryAmountMap = {};
     for (var expense in expensesList) {
       if (categoryAmountMap.containsKey(expense.category)) {
-        categoryAmountMap[expense.category] = categoryAmountMap[expense.category]! + expense.amount;
+        categoryAmountMap[expense.category] =
+            categoryAmountMap[expense.category]! + expense.amount;
       } else {
         categoryAmountMap[expense.category] = expense.amount;
       }
@@ -49,25 +56,37 @@ class HomeController extends GetxController {
   Rx<UserDetails> userDetails = UserDetails().obs;
 
   getSavedData() async {
-    try{
+    try {
       String data = await UserPreferences().getUserData() ?? "";
       var userData = jsonDecode(data);
       userDetails.value = UserDetails.fromJson(userData);
       userDetails.refresh();
-    } catch (e, stack){
-      printFlutterError(error: e,stack: stack, runTimeType: runtimeType);
+    } catch (e, stack) {
+      printFlutterError(error: e, stack: stack, runTimeType: runtimeType);
     }
   }
 
+  RxList<NoteListDataModel> notesList = <NoteListDataModel>[].obs;
+
+  RxBool notesListLoading = false.obs;
+
   getNotesListApiCall() async {
     try {
+      notesListLoading.value = true;
       await ApiManager().get('notes/', auth: true).then((data) async {
-        print(data);
-        // var jsonResponse = UserDetails.fromJson(data);
-        // UserPreferences().saveUserData(jsonResponse);
-        // Get.offNamed(AppRoutes.home);
+        if (data['data'] != null) {
+          notesList.clear();
+          var notesListJson = NotesListResponseModel.fromJson(data);
+          notesList.addAll(notesListJson.data ?? {});
+          notesList.refresh();
+          notesListLoading.value = false;
+        } else {
+          notesListLoading.value = false;
+        }
       });
     } catch (e, stack) {
+      notesListLoading.value = false;
+
       print('Error occurred: $e');
       print('Stack where occurred: $stack');
     }
@@ -80,7 +99,7 @@ class HomeController extends GetxController {
         MessageResponseModel messageResponseModel = MessageResponseModel();
         messageResponseModel = jsonResponse;
         showToast(messageResponseModel.message);
-        if(messageResponseModel.statusCode == 200) {
+        if (messageResponseModel.statusCode == 200) {
           UserPreferences().clearAll();
           Get.offAllNamed(AppRoutes.login);
         }
@@ -89,7 +108,29 @@ class HomeController extends GetxController {
       });
       // print('GET Response: ${getResponse.data}');
     } catch (e, stack) {
-      printFlutterError(runTimeType: runtimeType, stack: stack, error: e.toString());
+      printFlutterError(
+          runTimeType: runtimeType, stack: stack, error: e.toString());
+    }
+  }
+
+  deleteNoteApiCall({id}) async {
+    try {
+      var request = {
+        'id': id,
+      };
+      await ApiManager().post('notes/delete', auth: true, body: request).then((data) async {
+        var jsonResponse = MessageResponseModel.fromJson(data);
+        MessageResponseModel messageResponseModel = MessageResponseModel();
+        messageResponseModel = jsonResponse;
+        showToast(messageResponseModel.message);
+        if (messageResponseModel.statusCode == 200) {
+          getNotesListApiCall();
+        }
+      });
+      // print('GET Response: ${getResponse.data}');
+    } catch (e, stack) {
+      printFlutterError(
+          runTimeType: runtimeType, stack: stack, error: e.toString());
     }
   }
 }

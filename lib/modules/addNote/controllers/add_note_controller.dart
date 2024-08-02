@@ -11,6 +11,8 @@ class AddNoteController extends GetxController {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  final GlobalKey<FormState> addNoteKey = GlobalKey<FormState>();
+
   saveNoteApiCall() async {
     try {
       var bodyData = {

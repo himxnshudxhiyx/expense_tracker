@@ -13,61 +13,70 @@ class AddNewNote extends StatefulWidget {
 
 class _AddNewNoteState extends State<AddNewNote> {
   final AddNoteController controller =
-      Get.put<AddNoteController>(AddNoteController());
+  Get.put<AddNoteController>(AddNoteController());
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Colors.white,
       padding: EdgeInsets.only(
-          left: 16.0,
-          right: 16.0,
-          top: 24.0,
-          bottom: MediaQuery.of(context).viewInsets.bottom +
-              20), // Increased vertical padding
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextView(
-            text: "Add New Note",
-            fontSize: 20,
+        left: 16.0,
+        right: 16.0,
+        top: 24.0,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
+      child: Form(
+        key: controller.addNoteKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextView(
+                text: "Add New Note",
+                fontSize: 20,
+              ),
+              SizedBox(height: 20),
+              AppTextField(
+                labelText: 'Title',
+                controller: controller.titleController,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              AppTextField(
+                labelText: 'Description',
+                controller: controller.descriptionController,
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              ElevatedButtonWidget(
+                onPressed: () {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus &&
+                      currentFocus.focusedChild != null) {
+                    FocusManager.instance.primaryFocus!.unfocus();
+                  }
+                  if (controller.addNoteKey.currentState!.validate()) {
+                    controller.saveNoteApiCall();
+                  }
+                },
+                text: 'Submit',
+              ),
+            ],
           ),
-          SizedBox(height: 20),
-          AppTextField(
-            labelText: 'Title',
-            controller: controller.titleController,
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a title';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          AppTextField(
-            labelText: 'Description',
-            controller: controller.descriptionController,
-            keyboardType: TextInputType.multiline,
-            maxLines: 3,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a description';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          ElevatedButtonWidget(
-            onPressed: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus &&
-                  currentFocus.focusedChild != null) {
-                FocusManager.instance.primaryFocus!.unfocus();
-              }
-              controller.saveNoteApiCall();
-            },
-            text: 'Submit',
-          ),
-        ],
+        ),
       ),
     );
   }
