@@ -37,6 +37,7 @@ class NoteListDataModel {
   String? userId;
   String? title;
   String? description;
+  String? noteStatus;
   DateTime? createdAt;
   int? v;
 
@@ -45,6 +46,7 @@ class NoteListDataModel {
     this.userId,
     this.title,
     this.description,
+    this.noteStatus,
     this.createdAt,
     this.v,
   });
@@ -53,6 +55,7 @@ class NoteListDataModel {
     id: json["_id"],
     userId: json["userId"],
     title: json["title"],
+    noteStatus: json["noteStatus"],
     description: json["description"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     v: json["__v"],
@@ -61,6 +64,7 @@ class NoteListDataModel {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "userId": userId,
+    "noteStatus": noteStatus,
     "title": title,
     "description": description,
     "createdAt": createdAt?.toIso8601String(),

@@ -7,16 +7,26 @@ import 'package:get/get.dart';
 import '../../../Widgets/text_field.dart'; // Adjust the import path as needed
 
 class AddNewNote extends StatefulWidget {
+  final bool isEdit;
+  final String? title;
+  final String? description;
+  final String? id;
+
+  // Constructor to accept the parameter
+  AddNewNote({required this.isEdit, this.title, this.description, this.id});
   @override
   _AddNewNoteState createState() => _AddNewNoteState();
 }
 
 class _AddNewNoteState extends State<AddNewNote> {
-  final AddNoteController controller =
-  Get.put<AddNoteController>(AddNoteController());
+  final AddNoteController controller = Get.put<AddNoteController>(AddNoteController());
 
   @override
   Widget build(BuildContext context) {
+    print(controller.noteId.value);
+    controller.noteId.value = widget.id??"0";
+    controller.titleController.text = widget.title ?? "";
+    controller.descriptionController.text = widget.description ?? "";
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(
@@ -32,7 +42,7 @@ class _AddNewNoteState extends State<AddNewNote> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextView(
-                text: "Add New Note",
+                text: widget.isEdit ? "Update Note" : "Add New Note",
                 fontSize: 20,
               ),
               SizedBox(height: 20),
@@ -69,10 +79,14 @@ class _AddNewNoteState extends State<AddNewNote> {
                     FocusManager.instance.primaryFocus!.unfocus();
                   }
                   if (controller.addNoteKey.currentState!.validate()) {
-                    controller.saveNoteApiCall();
+                    if (widget.isEdit == false) {
+                      controller.saveNoteApiCall();
+                    } else {
+                      controller.updateNoteApiCall();
+                    }
                   }
                 },
-                text: 'Submit',
+                text: (widget.isEdit == true) ? 'Update' : 'Submit',
               ),
             ],
           ),

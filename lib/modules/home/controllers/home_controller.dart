@@ -15,6 +15,7 @@ import '../../../routes/app_routes.dart';
 
 class HomeController extends GetxController {
   RxInt totalExpenses = 0.obs;
+  RxBool addButtonClicked = false.obs;
 
   RxList<Expense> expensesList = <Expense>[].obs;
 
@@ -87,6 +88,27 @@ class HomeController extends GetxController {
     } catch (e, stack) {
       notesListLoading.value = false;
 
+      print('Error occurred: $e');
+      print('Stack where occurred: $stack');
+    }
+  }
+
+  updateNoteStatus({noteId}) async {
+    try {
+      var bodyData = {
+        'id':noteId,
+        'noteStatus' : 'Done'
+      };
+      await ApiManager().post('notes/markAsDone', body: bodyData, auth: true).then((data) async {
+        MessageResponseModel messageResponseModel = MessageResponseModel();
+        var jsonData= MessageResponseModel.fromJson(data);
+        messageResponseModel = jsonData;
+        showToast(messageResponseModel.message);
+        if (messageResponseModel.statusCode == 200) {
+          onRefresh();
+        }
+      });
+    } catch (e, stack) {
       print('Error occurred: $e');
       print('Stack where occurred: $stack');
     }

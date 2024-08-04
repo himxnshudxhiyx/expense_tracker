@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../constants/common_functions.dart';
 import '../../addNote/controllers/add_note_controller.dart';
 import '../../addNote/views/add_note_view.dart';
 
@@ -18,54 +19,96 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextView(
-              fontColor: Colors.white,
-              text: "${controller.getGreeting()},",
-            ),
-            Obx(
-              () => GestureDetector(
-                onTap: () {},
-                child: TextView(
-                  fontColor: Colors.white,
-                  text:
-                      "${controller.userDetails.value.firstName ?? ""} ${controller.userDetails.value.lastName ?? ""}",
-                  // style: TextStyle(fontSize: Get.height * 0.025),
+        appBar: AppBar(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextView(
+                fontColor: Colors.white,
+                text: "${controller.getGreeting()},",
+              ),
+              Obx(
+                () => GestureDetector(
+                  onTap: () {},
+                  child: TextView(
+                    fontColor: Colors.white,
+                    text:
+                        "${controller.userDetails.value.firstName ?? ""} ${controller.userDetails.value.lastName ?? ""}",
+                    // style: TextStyle(fontSize: Get.height * 0.025),
+                  ),
                 ),
               ),
+            ],
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                controller.hitLogoutApi();
+              },
+              child: Icon(
+                Icons.logout_rounded,
+                color: Colors.white,
+              ),
+            ).paddingOnly(right: 10),
+          ],
+        ),
+        floatingActionButton: _floatingActionButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked, // Use a fixed location
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling, // Or use a custom animator if needed
+        body: _bodyWidget(),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () async {
+        //     var result = await Get.toNamed(AppRoutes.addExpense);
+        //     if (result == true) {
+        //       controller.getExpenseByCategory();
+        //     }
+        //   },
+        //   elevation: 0,
+        //   tooltip: 'Add Expenses',
+        //   backgroundColor: Colors.redAccent,
+        //   child: Icon(
+        //     Icons.add,
+        //   ),
+        // ),
+    );
+  }
+
+  _floatingActionButton() {
+    return Obx(
+      () => Padding(
+        padding: EdgeInsets.only(bottom: 20.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            (controller.addButtonClicked.value)
+                ? Align(
+              alignment: Alignment.centerRight,
+                  child: Container(
+                      width:200.w,
+                      color: Colors.white, // Background color of the button
+                      child: _addNotes(),
+                    ),
+                )
+                : SizedBox.shrink(),
+            FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: () {
+                controller.addButtonClicked.value =
+                    !controller.addButtonClicked.value;
+              },
+              child: (!controller.addButtonClicked.value)
+                  ? Icon(
+                      Icons.add_rounded,
+                    )
+                  : Icon(
+                      Icons.close,
+                    ),
             ),
           ],
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              controller.hitLogoutApi();
-            },
-            child: Icon(
-              Icons.logout_rounded,
-              color: Colors.white,
-            ),
-          ).paddingOnly(right: 10),
-        ],
       ),
-      body: _bodyWidget(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     var result = await Get.toNamed(AppRoutes.addExpense);
-      //     if (result == true) {
-      //       controller.getExpenseByCategory();
-      //     }
-      //   },
-      //   elevation: 0,
-      //   tooltip: 'Add Expenses',
-      //   backgroundColor: Colors.redAccent,
-      //   child: Icon(
-      //     Icons.add,
-      //   ),
-      // ),
     );
   }
 
@@ -145,28 +188,15 @@ class HomeScreen extends GetView<HomeController> {
         onRefresh: () async {
           await controller.onRefresh();
         },
-        child: Stack(
-          children: [
-            CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child:
-                      _notesList(),
-                      // Extra space to push content up and ensure scrolling if content is small
-                      // SizedBox(
-                      //     height: Get.height * 0.1), // Adjust height as needed
-                    // ],
-                  // ),
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.maxFinite,
-                color: Colors.white, // Background color of the button
-                child: _addNotes(),
-              ),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: _notesList(),
+              // Extra space to push content up and ensure scrolling if content is small
+              // SizedBox(
+              //     height: Get.height * 0.1), // Adjust height as needed
+              // ],
+              // ),
             ),
           ],
         ),
@@ -197,6 +227,7 @@ class HomeScreen extends GetView<HomeController> {
     return ElevatedButtonWidget(
       text: "Add Notes",
       onPressed: () {
+        controller.addButtonClicked.value = !controller.addButtonClicked.value;
         showModalBottomSheet(
           context: Get.context!,
           isScrollControlled: true,
@@ -206,51 +237,57 @@ class HomeScreen extends GetView<HomeController> {
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-              child: AddNewNote(),
+              child: AddNewNote(isEdit: false),
             );
           },
         ).then((_) {
           Get.delete<AddNoteController>();
-          controller.onRefresh();
+          // controller.onRefresh();
         });
       },
-    ).paddingOnly(bottom: 5.sp).paddingSymmetric(horizontal: 30.sp);
+    ).paddingOnly(bottom: 5.sp);
   }
 
   _notesList() {
     return Container(
-      height: MediaQuery.of(Get.context!).size.height * 0.8, // or any fixed height
+      height:
+          MediaQuery.of(Get.context!).size.height * 0.8, // or any fixed height
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextView(
             textAlign: TextAlign.start,
-            text: "Notes List - ",
+            text: "My Notes",
             fontSize: 20,
             fontWeight: FontWeight.w500,
-          ).paddingOnly(left: 10),
+          ).paddingAll(10).paddingOnly(left: 7),
           Expanded(
             child: Obx(
-                  () => (controller.notesList.isEmpty && controller.notesListLoading.value == false)
+              () => (controller.notesList.isEmpty &&
+                      controller.notesListLoading.value == false)
                   ? Center(
-                child: TextView(
-                  text: "No Notes Found",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-              )
+                      child: TextView(
+                        text: "No Notes Found",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
                   : (controller.notesListLoading.value != true)
-                  ? ListView.builder(
-                itemCount: controller.notesList.length,
-                itemBuilder: (context, index) {
-                  return notesListTile(
-                    title: controller.notesList[index].title,
-                    description: controller.notesList[index].description,
-                    id: controller.notesList[index].id,
-                  );
-                },
-              )
-                  : shimmerNotesListTile(),
+                      ? ListView.builder(
+                          primary: false,
+                          itemCount: controller.notesList.length,
+                          itemBuilder: (context, index) {
+                            return notesListTile(
+                              title: controller.notesList[index].title,
+                              description:
+                                  controller.notesList[index].description,
+                              id: controller.notesList[index].id,
+                              createdOn: controller.notesList[index].createdAt,
+                              status: controller.notesList[index].noteStatus,
+                            );
+                          },
+                        )
+                      : shimmerNotesListTile(),
             ),
           ),
         ],
@@ -302,19 +339,44 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  notesListTile({title, description, id}) {
+  notesListTile({title, description, id, createdOn, status}) {
     return Slidable(
       endActionPane: ActionPane(
         motion: ScrollMotion(),
         children: [
-          SlidableAction(
-            onPressed: (_) {},
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            icon: Icons.edit,
-            label: 'Edit',
-            flex: 1, // Adjust flex as needed
-          ),
+          (status == 'Done')
+              ? SizedBox()
+              : SlidableAction(
+                  onPressed: (_) {
+                    showModalBottomSheet(
+                      context: Get.context!,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        print("id:${id}");
+                        return ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          child: AddNewNote(
+                              isEdit: true,
+                              title: title,
+                              description: description,
+                              id: id),
+                        );
+                      },
+                    ).then((_) {
+                      Get.delete<AddNoteController>();
+                      // controller.onRefresh();
+                    });
+                  },
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                  icon: Icons.edit,
+
+                  // label: 'Edit',
+                  flex: 1, // Adjust flex as needed
+                ),
           SlidableAction(
             onPressed: (_) {
               controller.deleteNoteApiCall(id: id);
@@ -322,9 +384,21 @@ class HomeScreen extends GetView<HomeController> {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
+            // label: 'Delete',
             flex: 1, // Adjust flex as needed
           ),
+          (status == 'Done')
+              ? SizedBox()
+              : SlidableAction(
+                  onPressed: (_) {
+                    controller.updateNoteStatus(noteId: id);
+                  },
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  icon: Icons.done_rounded,
+                  // label: 'Mark As\n Done',
+                  flex: 1, // Adjust flex as needed
+                ),
         ],
       ),
       child: Container(
@@ -339,21 +413,39 @@ class HomeScreen extends GetView<HomeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
+            TextView(
+              text: title,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              fontColor: Colors.black,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+                decoration: (status != 'Active' || status != "Updated")
+                    ? TextDecoration.lineThrough
+                    : null, // Adds the strikethrough line
               ),
             ),
             SizedBox(height: 8), // Add spacing between title and description
-            Text(
-              description,
+            TextView(
+              text: convertDateFormat(dateString: createdOn),
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              fontColor: Colors.black,
               style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
+                decoration: (status != 'Active' || status != "Updated")
+                    ? TextDecoration.lineThrough
+                    : null, // Adds the strikethrough line
+              ),
+            ),
+            SizedBox(height: 8), // Add spacing between title and description
+            TextView(
+              text: description,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              fontColor: Colors.black,
+              style: TextStyle(
+                decoration: (status != 'Active' || status != "Updated")
+                    ? TextDecoration.lineThrough
+                    : null, // Adds the strikethrough line
               ),
               maxLines: 5,
             ),
