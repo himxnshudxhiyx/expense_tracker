@@ -3,7 +3,7 @@ import 'dio_client.dart';
 class ApiManager {
   final DioClient _dioClient = DioClient(); // Instance of DioClient
 
-  String baseUrl = "https://notes-node-rho.vercel.app/api/";
+  String baseUrl = "https://notes-node-theta.vercel.app/api/";
 
   Future<Map<String, dynamic>> get(String url, {Map<String, dynamic>? params, bool? auth}) async {
     try {

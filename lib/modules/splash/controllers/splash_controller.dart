@@ -40,6 +40,8 @@ class SplashController extends GetxController {
         }
       });
     } catch (e, stack) {
+      UserPreferences().clearAll();
+      Get.offAllNamed(AppRoutes.login);
       print('Error occurred: $e');
       print('Stack where occurred: $stack');
     }

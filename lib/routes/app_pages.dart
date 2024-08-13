@@ -1,5 +1,9 @@
 import 'package:expense_tracker/modules/add_expenses/bindings/add_expense_bindings.dart';
 import 'package:expense_tracker/modules/add_expenses/views/add_expense_screen.dart';
+import 'package:expense_tracker/modules/chatModule/bindings/chat_bindings.dart';
+import 'package:expense_tracker/modules/chatModule/bindings/message_bindings.dart';
+import 'package:expense_tracker/modules/chatModule/views/chat_screen.dart';
+import 'package:expense_tracker/modules/chatModule/views/message_screen.dart';
 import 'package:expense_tracker/modules/home/bindings/home_bindings.dart';
 import 'package:expense_tracker/modules/home/views/home_screen.dart';
 import 'package:expense_tracker/modules/login/views/login_screen.dart';
@@ -40,6 +44,16 @@ class AppPages {
       name: AppRoutes.addExpense,
       page: () => const AddExpenseScreen(),
       binding: AddExpenseBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.chatScreen,
+      page: () => ChatScreen(),
+      binding: ChatBindings(),
+    ),
+    GetPage(
+      name: AppRoutes.messageScreen,
+      page: () => MessageScreen(),
+      binding: MessageBindings(),
     ),
   ];
 }

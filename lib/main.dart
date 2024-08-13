@@ -14,18 +14,22 @@ String fcmToken = '';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+  );
+
   final NotificationService notificationService = NotificationService();
   await notificationService.init();
+
   runApp(const MyApp());
 }
 
 ApiManager apiManager = ApiManager();
 
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

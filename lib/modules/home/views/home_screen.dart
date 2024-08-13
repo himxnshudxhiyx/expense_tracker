@@ -20,6 +20,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -83,13 +84,25 @@ class HomeScreen extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             (controller.addButtonClicked.value)
-                ? Align(
-              alignment: Alignment.centerRight,
-                  child: Container(
-                      width:200.w,
-                      color: Colors.white, // Background color of the button
-                      child: _addNotes(),
+                ? Column(
+                  children: [
+                    Align(
+                                  alignment: Alignment.centerRight,
+                      child: Container(
+                          width:200.w,
+                          color: Colors.white, // Background color of the button
+                          child: _addNotes(),
+                        ),
                     ),
+                    Align(
+                                  alignment: Alignment.centerRight,
+                      child: Container(
+                          width:200.w,
+                          color: Colors.white, // Background color of the button
+                          child: _chatWidget(),
+                        ),
+                    ),
+                  ],
                 )
                 : SizedBox.shrink(),
             FloatingActionButton(
@@ -244,6 +257,16 @@ class HomeScreen extends GetView<HomeController> {
           Get.delete<AddNoteController>();
           // controller.onRefresh();
         });
+      },
+    ).paddingOnly(bottom: 5.sp);
+  }
+
+  _chatWidget() {
+    return ElevatedButtonWidget(
+      text: "Chat",
+      onPressed: () {
+        controller.addButtonClicked.value = !controller.addButtonClicked.value;
+        Get.toNamed(AppRoutes.chatScreen);
       },
     ).paddingOnly(bottom: 5.sp);
   }

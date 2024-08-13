@@ -38,6 +38,7 @@ class DioClient {
           // Optional: Log request details, headers, etc.
           log('--> Method: ${options.method} | URL: ${options.path}');
           log('--> Request ${options.data}');
+          log('--> Headers ${options.headers}');
           return handler.next(options);
         },
         onResponse: (response, handler) {

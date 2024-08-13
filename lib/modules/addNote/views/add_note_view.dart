@@ -51,19 +51,19 @@ class AddNewNote extends StatelessWidget {
                   }
                   return null;
                 },
-                suffixWidget: InkWell(
-                  onTap: () {
-                    print("Clicked");
-                    if (controller.speechToText.isListening) {
-                      controller.stopListening();
-                    } else {
-                      controller.startListening();
-                    }
-                  },
-                  child: Icon(
-                    Icons.mic,
-                  ),
-                ),
+                // suffixWidget: InkWell(
+                //   onTap: () {
+                //     print("Clicked");
+                //     if (controller.speechToText.isListening) {
+                //       controller.stopListening();
+                //     } else {
+                //       controller.startListening();
+                //     }
+                //   },
+                //   child: Icon(
+                //     Icons.mic,
+                //   ),
+                // ),
               ),
               SizedBox(height: 16),
               AppTextField(
