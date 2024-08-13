@@ -45,3 +45,6 @@ app.*.map.json
 /pubspec.lock
 /ios/Podfile
 /ios/Podfile.lock
+
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
