@@ -6,27 +6,22 @@ import 'package:get/get.dart';
 
 import '../../../Widgets/text_field.dart'; // Adjust the import path as needed
 
-class AddNewNote extends StatefulWidget {
+class AddNewNote extends StatelessWidget {
   final bool isEdit;
+  final AddNoteController controller;
   final String? title;
   final String? description;
   final String? id;
 
   // Constructor to accept the parameter
-  AddNewNote({required this.isEdit, this.title, this.description, this.id});
-  @override
-  _AddNewNoteState createState() => _AddNewNoteState();
-}
+  AddNewNote({required this.isEdit, this.title, this.description, this.id})
+      : controller = Get.put(AddNoteController(
+            isEdit: isEdit, id: id, description: description, title: title));
 
-class _AddNewNoteState extends State<AddNewNote> {
-  final AddNoteController controller = Get.put<AddNoteController>(AddNoteController());
+  // final AddNoteController controller = Get.put<AddNoteController>(AddNoteController(isEdit: isEdit));
 
   @override
   Widget build(BuildContext context) {
-    print(controller.noteId.value);
-    controller.noteId.value = widget.id??"0";
-    controller.titleController.text = widget.title ?? "";
-    controller.descriptionController.text = widget.description ?? "";
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(
@@ -42,7 +37,7 @@ class _AddNewNoteState extends State<AddNewNote> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextView(
-                text: widget.isEdit ? "Update Note" : "Add New Note",
+                text: isEdit ? "Update Note" : "Add New Note",
                 fontSize: 20,
               ),
               SizedBox(height: 20),
@@ -56,6 +51,19 @@ class _AddNewNoteState extends State<AddNewNote> {
                   }
                   return null;
                 },
+                suffixWidget: InkWell(
+                  onTap: () {
+                    print("Clicked");
+                    if (controller.speechToText.isListening) {
+                      controller.stopListening();
+                    } else {
+                      controller.startListening();
+                    }
+                  },
+                  child: Icon(
+                    Icons.mic,
+                  ),
+                ),
               ),
               SizedBox(height: 16),
               AppTextField(
@@ -79,14 +87,14 @@ class _AddNewNoteState extends State<AddNewNote> {
                     FocusManager.instance.primaryFocus!.unfocus();
                   }
                   if (controller.addNoteKey.currentState!.validate()) {
-                    if (widget.isEdit == false) {
+                    if (isEdit == false) {
                       controller.saveNoteApiCall();
                     } else {
                       controller.updateNoteApiCall();
                     }
                   }
                 },
-                text: (widget.isEdit == true) ? 'Update' : 'Submit',
+                text: (isEdit == true) ? 'Update' : 'Submit',
               ),
             ],
           ),

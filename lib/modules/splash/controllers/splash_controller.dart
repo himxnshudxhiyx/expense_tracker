@@ -1,13 +1,19 @@
 import 'package:expense_tracker/constants/functions/preference_manager.dart';
 import 'package:expense_tracker/modules/login/models/login_api_response_model.dart';
 import 'package:expense_tracker/routes/app_routes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/functions/api_manager.dart';
+import '../../../main.dart';
 
 class SplashController extends GetxController {
   @override
   void onInit() {
+    FirebaseMessaging.instance.getToken().then((token){
+      fcmToken = token!;
+      print("Token--->>>${token}");
+    });
     navigateToNextScreen();
     super.onInit();
   }

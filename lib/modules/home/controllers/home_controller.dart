@@ -75,13 +75,14 @@ class HomeController extends GetxController {
     try {
       notesListLoading.value = true;
       await ApiManager().get('notes/', auth: true).then((data) async {
-        if (data['data'] != null) {
+        if (data['status'] == 200) {
           notesList.clear();
           var notesListJson = NotesListResponseModel.fromJson(data);
           notesList.addAll(notesListJson.data ?? {});
           notesList.refresh();
           notesListLoading.value = false;
         } else {
+          notesList.clear();
           notesListLoading.value = false;
         }
       });

@@ -41,7 +41,7 @@ class UserDetails {
   String? username;
   String? firstName;
   String? lastName;
-  String? phoneNumber;
+  var phoneNumber;
   bool? verified;
 
   UserDetails({

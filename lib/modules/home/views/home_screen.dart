@@ -419,7 +419,7 @@ class HomeScreen extends GetView<HomeController> {
               fontWeight: FontWeight.w500,
               fontColor: Colors.black,
               style: TextStyle(
-                decoration: (status != 'Active' || status != "Updated")
+                decoration: (status == 'Done')
                     ? TextDecoration.lineThrough
                     : null, // Adds the strikethrough line
               ),
@@ -431,7 +431,7 @@ class HomeScreen extends GetView<HomeController> {
               fontWeight: FontWeight.w500,
               fontColor: Colors.black,
               style: TextStyle(
-                decoration: (status != 'Active' || status != "Updated")
+                decoration: (status == 'Done')
                     ? TextDecoration.lineThrough
                     : null, // Adds the strikethrough line
               ),
@@ -443,7 +443,7 @@ class HomeScreen extends GetView<HomeController> {
               fontWeight: FontWeight.w400,
               fontColor: Colors.black,
               style: TextStyle(
-                decoration: (status != 'Active' || status != "Updated")
+                decoration: (status == 'Done')
                     ? TextDecoration.lineThrough
                     : null, // Adds the strikethrough line
               ),

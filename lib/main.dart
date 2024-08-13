@@ -1,4 +1,6 @@
 import 'package:expense_tracker/routes/app_pages.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +8,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/functions/api_manager.dart';
+import 'constants/functions/firebase_notifications.dart';
 
-void main() {
+String fcmToken = '';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  final NotificationService notificationService = NotificationService();
+  await notificationService.init();
   runApp(const MyApp());
 }
 

@@ -12,62 +12,62 @@ class NotesListResponseModel {
   List<NoteListDataModel>? data;
   int? count;
   String? message;
+  int? status;
 
   NotesListResponseModel({
     this.data,
     this.count,
     this.message,
+    this.status,
   });
 
   factory NotesListResponseModel.fromJson(Map<String, dynamic> json) => NotesListResponseModel(
     data: json["data"] == null ? [] : List<NoteListDataModel>.from(json["data"]!.map((x) => NoteListDataModel.fromJson(x))),
     count: json["count"],
     message: json["message"],
+    status: json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
     "count": count,
     "message": message,
+    "status": status,
   };
 }
 
 class NoteListDataModel {
   String? id;
-  String? userId;
-  String? title;
-  String? description;
-  String? noteStatus;
   DateTime? createdAt;
-  int? v;
+  String? description;
+  String? title;
+  String? userId;
+  String? noteStatus;
 
   NoteListDataModel({
     this.id,
-    this.userId,
-    this.title,
-    this.description,
-    this.noteStatus,
     this.createdAt,
-    this.v,
+    this.description,
+    this.title,
+    this.userId,
+    this.noteStatus,
   });
 
   factory NoteListDataModel.fromJson(Map<String, dynamic> json) => NoteListDataModel(
-    id: json["_id"],
-    userId: json["userId"],
-    title: json["title"],
-    noteStatus: json["noteStatus"],
-    description: json["description"],
+    id: json["id"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    v: json["__v"],
+    description: json["description"],
+    title: json["title"],
+    userId: json["userId"],
+    noteStatus: json["noteStatus"],
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
+    "id": id,
+    "createdAt": createdAt?.toIso8601String(),
+    "description": description,
+    "title": title,
     "userId": userId,
     "noteStatus": noteStatus,
-    "title": title,
-    "description": description,
-    "createdAt": createdAt?.toIso8601String(),
-    "__v": v,
   };
 }
