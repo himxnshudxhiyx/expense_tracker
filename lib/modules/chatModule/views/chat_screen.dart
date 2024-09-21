@@ -11,15 +11,14 @@ class ChatScreen extends GetView<ChatController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: (){
-            Get.back();
-          },
-          child: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.white,
-          ),
-        ),
+//         leading: InkWell(
+//           onTap: (){
+// Get.toNamed(AppRoutes.main);          },
+//           child: Icon(
+//             Icons.arrow_back_rounded,
+//             color: Colors.white,
+//           ),
+//         ),
         title: TextView(
           text: "Chat",
           fontColor: Colors.white,

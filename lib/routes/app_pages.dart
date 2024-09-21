@@ -7,6 +7,10 @@ import 'package:expense_tracker/modules/chatModule/views/message_screen.dart';
 import 'package:expense_tracker/modules/home/bindings/home_bindings.dart';
 import 'package:expense_tracker/modules/home/views/home_screen.dart';
 import 'package:expense_tracker/modules/login/views/login_screen.dart';
+import 'package:expense_tracker/modules/mainScreen/bindings/main_screen_bindings.dart';
+import 'package:expense_tracker/modules/mainScreen/views/main_screen.dart';
+import 'package:expense_tracker/modules/profile/bindings/profile_screen_bindings.dart';
+import 'package:expense_tracker/modules/profile/view/profile_screen.dart';
 import 'package:expense_tracker/modules/splash/bindings/splash_binding.dart';
 import 'package:expense_tracker/modules/splash/views/splash_screen.dart';
 import 'package:expense_tracker/routes/app_routes.dart';
@@ -34,6 +38,16 @@ class AppPages {
       name: AppRoutes.login,
       page: () => LoginScreen(),
       binding: LoginBindings(),
+    ),
+    GetPage(
+      name: AppRoutes.main,
+      page: () => MainScreen(),
+      bindings: [MainScreenBindings(), HomeBindings(), ChatBindings(), ProfileScreenBindings()],
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => ProfileScreen(),
+      binding: ProfileScreenBindings(),
     ),
     GetPage(
       name: AppRoutes.signUp,

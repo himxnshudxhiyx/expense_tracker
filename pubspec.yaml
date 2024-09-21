@@ -30,12 +30,22 @@ dependencies:
   flutter_local_notifications: ^17.2.2
   speech_to_text: ^6.6.2
   cloud_firestore: ^5.2.1
+  flutter_contacts: ^1.1.9+2
+  floating_bottom_navigation_bar: ^1.5.2
+  permission_handler: ^11.3.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/ChatNotzLogo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 flutter:
 

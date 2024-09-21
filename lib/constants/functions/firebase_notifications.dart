@@ -59,8 +59,8 @@ class NotificationService {
       // Show notification
       await _flutterLocalNotificationsPlugin.show(
         message.hashCode,
-        message.notification?.title ?? 'MyNotes - DSS', // Provide a default value
-        message.notification?.body ?? 'MyNotes - DSS', // Provide a default value
+        message.notification?.title ?? 'ChatNotz', // Provide a default value
+        message.notification?.body ?? 'ChatNotz', // Provide a default value
         platformChannelSpecifics,
         payload: message.data['payload'], // Optional: pass additional data
       );

@@ -32,7 +32,7 @@ class AddNoteController extends GetxController {
       titleController.text = title ?? "";
       descriptionController.text = description ?? "";
     }
-    initSpeech();
+    // initSpeech();
     super.onInit();
   }
 

@@ -1,2 +1,2 @@
-const String splashIcon = 'assets/images/splashIcon.png';
+const String splashIcon = 'assets/images/ChatNotz.png';
 const String loginIcon = 'assets/images/loginScreen.png';

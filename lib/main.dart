@@ -15,8 +15,7 @@ String fcmToken = '';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-  );
+  await Firebase.initializeApp();
 
   final NotificationService notificationService = NotificationService();
   await notificationService.init();

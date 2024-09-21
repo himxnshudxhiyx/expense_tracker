@@ -40,7 +40,7 @@ class AllUserListApiDataModel {
   String? id;
   String? firstName;
   String? lastName;
-  int? phoneNumber;
+  var phoneNumber;
   String? username;
   bool? verified;
   bool? isLoggedIn;

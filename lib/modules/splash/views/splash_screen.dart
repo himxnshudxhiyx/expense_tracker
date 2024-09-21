@@ -20,7 +20,7 @@ class SplashScreen extends GetView<SplashController> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          "Expense Tracker",
+          "ChatNotz - DSS",
           style: TextStyle(fontSize: Get.height * 0.06),
         ).paddingOnly(bottom: Get.height * 0.05),
         Image.asset(
